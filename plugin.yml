@@ -1,0 +1,9 @@
+name: PartyPlugin
+description: PartyPlugin for pocketmine!!
+author: CavinMiana [FreshProjectz Technology]
+version: 1.11.0
+main: CavinMiana\PartyPlugin\Main
+api: 1.4
+commands:
+ party:
+  description: Main command for PartyPlugin.

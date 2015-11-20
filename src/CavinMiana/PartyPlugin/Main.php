@@ -47,15 +47,17 @@ class Main extends PluginBase implements Listener{
 								if($sender->hasPermission("party.add")){
 									if(isset($args[1])){
 										$player = $this->getServer()->getPlayer($args[1]);
-										if($player == null){
+										if(!$player == null){
 											$this->sendRequest($player, $sender);
-											else{
-												$sender->sendMessage(TextFormat::RED."Player was not invited to party because player was not found");
-											}
-											return;
+										}	else{
+											$sender->sendMessage(TextFormat::RED."Player was not invited to party because player was not found");
 										}
 									}
+									return;
+								}{
+									$sender->sendMessage(TextFormat::RED."You dont have permissiond to do this command!");
 								}
+								break;
 								case "list":
 								if($sender->hasPermission("party.list")){
 									$config = new Config($this->getDataFolder()."players/". strtolower($sender->getName()).".yml", Config::YAML);
@@ -71,7 +73,34 @@ class Main extends PluginBase implements Listener{
 								break;
 								// More Todo. Ill work on this tommorow
 						}
+					}}else{
+						$sender->sendMessage("You command in-game");
+				}
+				break;
+			case "accept":
+				if($sender->hasPermission("party.accept")){
+					if(in_array($sender->getName(), $this->request)){
+						foreach($this->request as $target => $request){
+							$target = $this->getServer()->getPlayer($target);
+							$request = $this->getServer()->getPlayer($request);
+							echo $target->getName().$request->getName();
+							if($request->getName() === $sender->getName()){
+								$this->addToParty($target, $request);
+								$this->addToParty($request, $target);
+							}
+						}
+						return;
+					}else{
+						$sender->sendMessage(TextFormat::GREEN."No pending party request yet ;)");
 					}
+					return;
+				}else{
+					$sender->sendMessage(TextFormat::RED."You dont have permission for that command");
+				}
+				break;
+			case "sethome":
+				if($sender->hasPermission("party.sethome")){
+					// More todo. Just finished some commands. Going to start on API and finish off commands tommorow.
 				}
 		}
 	}
